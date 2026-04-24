@@ -2,10 +2,11 @@ using BlogCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace BlogCore.Controllers
+namespace BlogCore.Areas.Client.Controllers
 {
     public class HomeController : Controller
     {
+        [Area("Client")]
         public IActionResult Index()
         {
             return View();

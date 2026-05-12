@@ -33,9 +33,7 @@
                             <a class="nav-link text-white" href="/Client/Home/Index">Home</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/Admin/Categories/Index">Test Cat</a>
-                        </li>
+               
    
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white-50" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -53,6 +51,11 @@
                 </div>
             </div>
         </nav>
+
+        @if (ViewData["Title"]?.ToString() == "Home")
+        {
+            <partial name="_Slider" model="Model" />
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">

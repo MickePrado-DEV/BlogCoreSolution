@@ -15,10 +15,14 @@ namespace BlogCoreSolution.DataAccess.Data.Repository
         {
             _db = db;
             CategoryRepository = new CategoryRepository(_db);
+            ArticleRepository = new ArticleRepository(_db);
+            SliderRepository = new SliderRepository(_db);
         }
        
 
         public ICategoryRepository CategoryRepository { get; private set; }
+        public IArticleRepository ArticleRepository { get; private set; }
+        public ISliderRepository SliderRepository { get; private set; }
         public void Dispose()
         {
            _db.Dispose();

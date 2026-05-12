@@ -6,10 +6,10 @@ using System.Text;
 
 namespace BlogCoreSolution.DataAccess.Data.Repository.IRepository
 {
-    public interface ICategoryRepository: IRepository<Category>
+    public interface ISliderRepository: IRepository<Slider>
     {
-        void Update(Category category);
+        void Update(Slider slider);
 
-        IEnumerable<SelectListItem> GetListOfCategories();
+    
     }
 }

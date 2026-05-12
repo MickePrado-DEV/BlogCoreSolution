@@ -8,6 +8,11 @@ namespace BlogCoreSolution.Models
 {
     public class Category
     {
+
+        public Category()
+        {
+            DateCreate = DateTime.Now;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -20,6 +25,8 @@ namespace BlogCoreSolution.Models
         public int  Order { get; set; }
 
         public DateTime DateCreate { get; set; }
+
+
 
 
     }

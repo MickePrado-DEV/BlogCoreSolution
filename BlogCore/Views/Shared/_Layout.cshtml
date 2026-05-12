@@ -43,7 +43,7 @@
                                 <a class="dropdown-item" href="/Admin/Categories/Index">Categorías</a>
                                 <a class="dropdown-item" href="/Admin/Articles/Index">Artículos</a>
                                 <a class="dropdown-item" href="/Admin/Sliders/Index">Sliders</a>
-                                <a class="dropdown-item" href="/Admin/Usuarios/Index">Usuarios</a>
+                                <a class="dropdown-item" href="/Admin/Users/Index">Usuarios</a>
                             </div>
                         </li>
                     </ul>
@@ -51,11 +51,12 @@
                 </div>
             </div>
         </nav>
-
-        @if (ViewData["Title"]?.ToString() == "Home")
+        <!--Aquí vista parcial slider-->
+        @if (ViewBag.IsHome == true )
         {
-            <partial name="_Slider" model="Model" />
+            <partial name="_Slider"  />
         }
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">

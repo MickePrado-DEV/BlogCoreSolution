@@ -18,13 +18,15 @@ namespace BlogCore.Areas.Client.Controllers
 
         public IActionResult Index()
         {
+            var sliders = _workContainer.SliderRepository.GetAll();
+            var activeSliders = sliders.Where(s => s.Status).ToList();
             HomeVM homeVM = new HomeVM()
             {
-                SlidersList = _workContainer.SliderRepository.GetAll(),
+                SlidersList = activeSliders,
                 ArticleList = _workContainer.ArticleRepository.GetAll(),
 
             };
-            ViewData["IsHome"] = true;
+            ViewBag.IsHome = true;
 
             return View(homeVM);
         }

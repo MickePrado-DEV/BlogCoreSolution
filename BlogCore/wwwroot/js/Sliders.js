@@ -5,16 +5,26 @@ $(document).ready(function () {
 });
 
 function cargarDatatable() {
-    dataTable = $("#tblArticles").DataTable({
+    dataTable = $("#tblSliders").DataTable({
         "ajax": {
-            "url": "/Admin/Articles/GetAll",
+            "url": "/Admin/Sliders/GetAll",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
             { "data": "id", "width": "5%" },
             { "data": "name", "width": "20%" },
-            { "data": "category.name", "width": "10%" },
+            {
+                "data": "status",
+                "width": "20%",
+                "render": function (currentStatus) {
+                    if (currentStatus) {
+                        return "Activo"
+                    } else {
+                        return "Inactivo"
+                    }
+                }
+            },
             {
                 "data": "urlImage",
                 "width": "20%",
@@ -25,24 +35,17 @@ function cargarDatatable() {
                     return `<img src="${src}" width="120">`;
                 }
             },
-            {
-                "data": "creationDate",
-                "width": "20%",
-                "render": function (data) {
-                    if (!data) return "";
-                    return new Date(data).toLocaleDateString("es-CO");
-                }
-            },
+        
             {
                 "data": "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                        <a href="/Admin/Articles/Edit/${data}" 
+                        <a href="/Admin/Sliders/Edit/${data}" 
                         class="btn btn-success text-white" style="cursor:pointer; width:140px;">
                         <i class="bi bi-pencil-square"></i> Editar
                         </a>
                         &nbsp;
-                         <a onclick=Delete("/Admin/Articles/Delete/${data}") 
+                         <a onclick=Delete("/Admin/Sliders/Delete/${data}") 
                         class="btn btn-danger text-white" style="cursor:pointer; width:140px;">
                         <i class="bi bi-trash"></i> Borrar
                         </a>

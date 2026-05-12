@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace BlogCore.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ArticlesController : Controller
+    public class SlidersController : Controller
     {
         private readonly IWorkContainer _workContainer;
 
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ArticlesController(IWorkContainer workContainer, IWebHostEnvironment hostingEnvironment)
+        public SlidersController(IWorkContainer workContainer, IWebHostEnvironment hostingEnvironment)
         {
             _workContainer = workContainer;
             _hostingEnvironment = hostingEnvironment;
@@ -25,92 +25,84 @@ namespace BlogCore.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ArticleVM articleVM = new ArticleVM()
-            {
-                Article = new Article(),
-                ListOfCategories = _workContainer.CategoryRepository.GetListOfCategories()
-            };
+        
 
-            return View(articleVM);
+            return View();
         }
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            ArticleVM artiVM = new ArticleVM()
-            {
-                Article = new Article(),
-                ListOfCategories = _workContainer.CategoryRepository.GetListOfCategories()
-            };
 
             if (id != null)
             {
-                artiVM.Article = _workContainer.ArticleRepository.Get(id.GetValueOrDefault());
+               var _slider = _workContainer.SliderRepository.Get(id.GetValueOrDefault());
+                return View(_slider);
             }
 
-            return View(artiVM);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ArticleVM artiVM)
+        public IActionResult Edit(Slider slider)
         {
 
             if (ModelState.IsValid)
             {
-                string rutaPrincipal = _hostingEnvironment.WebRootPath;
-                var archivos = HttpContext.Request.Form.Files;
+                string mainRoot = _hostingEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
 
-                var articuloDesdeBd = _workContainer.ArticleRepository.Get(artiVM.Article.Id);
+                var sliderToBd = _workContainer.SliderRepository.Get(slider.Id);
 
-                if (archivos.Count > 0)
+                if (files.Count > 0)
                 {
-                    //Nuevo imagen para el artículo
-                    string nombreArchivo = Guid.NewGuid().ToString();
-                    var subidas = Path.Combine(rutaPrincipal, @"images\articles");
-                    Directory.CreateDirectory(subidas);
-                    var extension = Path.GetExtension(archivos[0].FileName);
+                    //Nuevo imagen para el slider
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(mainRoot, @"images\sliders");
+                    Directory.CreateDirectory(uploads);
+                    var extension = Path.GetExtension(files[0].FileName);
 
-                    var rutaImagen = Path.Combine(rutaPrincipal, articuloDesdeBd.UrlImage.TrimStart('\\', '/'));
+                    var rootImage = Path.Combine(mainRoot, sliderToBd.UrlImage.TrimStart('\\', '/'));
 
-                    if (System.IO.File.Exists(rutaImagen))
+                    if (System.IO.File.Exists(rootImage))
                     {
-                        System.IO.File.Delete(rutaImagen);
+                        System.IO.File.Delete(rootImage);
                     }
 
-                    //Nuevamente subimos el archivo
-                    using (var fileStreams = new FileStream(Path.Combine(subidas, nombreArchivo + extension), FileMode.Create))
+                    //Nuevamente subimos el slider
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                     {
-                        archivos[0].CopyTo(fileStreams);
+                        files[0].CopyTo(fileStreams);
                     }
 
-                    artiVM.Article.UrlImage = @"\images\articles\" + nombreArchivo + extension;
+                   slider.UrlImage = @"\images\sliders\" + fileName + extension;
                 }
                 else
                 {
                     //Aquí sería cuando la imagen ya existe y se conserva
-                    artiVM.Article.UrlImage = articuloDesdeBd.UrlImage;
+                    slider.UrlImage = sliderToBd.UrlImage;
                 }
 
-                _workContainer.ArticleRepository.Update(artiVM.Article);
+                _workContainer.SliderRepository.Update(slider);
                 _workContainer.Save();
                 return RedirectToAction(nameof(Index));
             }
 
-            artiVM.ListOfCategories = _workContainer.CategoryRepository.GetListOfCategories();
-            return View(artiVM);
+            
+            return View();
         }
 
         #region Call Api
         [HttpGet]
         public IActionResult getAll()
         {
-            return Json(new { data = _workContainer.ArticleRepository.GetAll(includeProperties: "Category") });
+            return Json(new { data = _workContainer.SliderRepository.GetAll() });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ArticleVM artiVM)
+        public IActionResult Create(Slider slider)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             foreach (var error in errors)
@@ -121,11 +113,11 @@ namespace BlogCore.Areas.Admin.Controllers
             {
                 string mainPath = _hostingEnvironment.WebRootPath;
                 var archives = HttpContext.Request.Form.Files;
-                if (artiVM.Article.Id == 0 && archives.Count > 0)
+                if ( archives.Count > 0)
                 {
-                    //Nuevo articulo
+                    //Nuevo slider
                     string fileMain = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(mainPath, @"images\articles");
+                    var uploads = Path.Combine(mainPath, @"images\sliders");
                     Directory.CreateDirectory(uploads);
                     var extension = Path.GetExtension(archives[0].FileName);
 
@@ -134,9 +126,9 @@ namespace BlogCore.Areas.Admin.Controllers
                         archives[0].CopyTo(fileStreams);
                     }
 
-                    artiVM.Article.UrlImage = @"\images\articles\" + fileMain + extension;
+                    slider.UrlImage = @"\images\sliders\" + fileMain + extension;
 
-                    _workContainer.ArticleRepository.Add(artiVM.Article);
+                    _workContainer.SliderRepository.Add(slider);
                     _workContainer.Save();
 
                     return RedirectToAction(nameof(Index));
@@ -147,18 +139,18 @@ namespace BlogCore.Areas.Admin.Controllers
                 }
             }
 
-            artiVM.ListOfCategories = _workContainer.CategoryRepository.GetListOfCategories();
-            return View(artiVM);
+          
+            return View();
         }
 
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var objFromDb = _workContainer.ArticleRepository.Get(id);
+            var objFromDb = _workContainer.SliderRepository.Get(id);
             if (objFromDb == null)
             {
-                return Json(new { success = false, message = "Error borrando artículo" });
+                return Json(new { success = false, message = "Error borrando slider" });
             }
 
             string rutaDirectorioPrincipal = _hostingEnvironment.WebRootPath;
@@ -171,9 +163,9 @@ namespace BlogCore.Areas.Admin.Controllers
                 }
             }
 
-            _workContainer.ArticleRepository.Remove(objFromDb);
+            _workContainer.SliderRepository.Remove(objFromDb);
             _workContainer.Save();
-            return Json(new { success = true, message = "Artículo Borrado Correctamente" });
+            return Json(new { success = true, message = "Slider Borrado Correctamente" });
 
         }
         //}

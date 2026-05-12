@@ -28,12 +28,13 @@ namespace BlogCoreSolution.Models
 
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Imagen")]
-        public string UrlImage { get; set; }
+        public string? UrlImage { get; set; }
 
-        [Required(ErrorMessage = "La categoria es obligatoria")]
+        [Range(1, int.MaxValue, ErrorMessage = "La categoria es obligatoria")]
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        [ValidateNever]
+        public Category? Category { get; set; }
     }
 }

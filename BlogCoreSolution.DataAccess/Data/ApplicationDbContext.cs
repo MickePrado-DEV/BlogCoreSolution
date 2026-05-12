@@ -16,6 +16,7 @@ namespace BlogCoreSolution.DataAccess.Data
 
         //aqui iran los dbSet
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Article> Articles { get; set; }
     }
 
    

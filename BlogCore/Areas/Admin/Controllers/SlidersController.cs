@@ -1,10 +1,12 @@
 ﻿using BlogCoreSolution.DataAccess.Data.Repository.IRepository;
 using BlogCoreSolution.Models;
 using BlogCoreSolution.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogCore.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class SlidersController : Controller
     {

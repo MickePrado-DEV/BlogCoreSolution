@@ -1,0 +1,78 @@
+﻿@page
+@using BlogCoreSolution.Utilities;
+@model RegisterModel
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2>Crear una nueva cuenta</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Ingresa tu correo" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Name" class="form-control" autocomplete="Name" aria-required="true" placeholder="Ingresa el nombre" />
+                <label asp-for="Input.Name">Nombre</label>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="Ingresa la direccion" />
+                <label asp-for="Input.Address">Direccion</label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.City" class="form-control" autocomplete="City" aria-required="true" placeholder="Ingresa la ciudad" />
+                <label asp-for="Input.City">Ciudad</label>
+                <span asp-validation-for="Input.City" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Country" class="form-control" autocomplete="Country" aria-required="true" placeholder="Ingresa el pais" />
+                <label asp-for="Input.Country">Pais</label>
+                <span asp-validation-for="Input.Country" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="PhoneNumber" aria-required="true" placeholder="Ingresa tu numero de telefono" />
+                <label asp-for="Input.PhoneNumber">Telefono</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password">Contraseña</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <div class="form-group row">
+                    <div class="col-6"><h4>Seleccionar Rol de Usuario</h4></div>
+                    <div class="col-5">
+                        <input type="radio" name="radUserRole" value="@CNT.Admin" />@CNT.Admin
+                        <input type="radio" name="radUserRole" value="@CNT.Registered" />@CNT.Registered
+                    </div>
+                </div>
+            }
+               
+            <!--Selector de roles-->
+           
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrar</button>
+        </form>
+    </div>
+   
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

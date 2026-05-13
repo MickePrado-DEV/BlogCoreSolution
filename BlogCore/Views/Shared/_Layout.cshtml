@@ -20,9 +20,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlogCore</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><<img src="~/images/blogger.png" alt="Alternate Text"  width="60"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -33,26 +33,44 @@
                             <a class="nav-link text-white" href="/Client/Home/Index">Home</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/Admin/Categories/Index">Test Cat</a>
-                        </li>
+                        @if(User.Identity.IsAuthenticated && User.IsInRole("Admin")){
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white-50" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Administrar Contenidos
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/Admin/Categories/Index">Categorías</a>
+                                    <a class="dropdown-item" href="/Admin/Articles/Index">Artículos</a>
+                                    <a class="dropdown-item" href="/Admin/Sliders/Index">Sliders</a>
+                                    <a class="dropdown-item" href="/Admin/Users/Index">Usuarios</a>
+                                </div>
+                            </li>
+                        }
+               
    
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white-50" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                Administrar Contenidos
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/Admin/Categories/Index">Categorías</a>
-                                <a class="dropdown-item" href="/Admin/Articles/Index">Artículos</a>
-                                <a class="dropdown-item" href="/Admin/Sliders/Index">Sliders</a>
-                                <a class="dropdown-item" href="/Admin/Usuarios/Index">Usuarios</a>
-                            </div>
-                        </li>
+                       
                     </ul>
+                    <!-- Formulario-->
+                    <div class="d-flex align-items-center ms-auto me-3">
+                        <form class="busqueda d-flex  ms-3 mr-4"
+                              asp-controller="Home" asp-action="SearchResult"
+                              method="GET">
+                            <input class="form-control text-dark" type="text" name="searchString" placeholder="ingresa lo que quieres buscar" />
+                            <button class="btn btn-success mx-2" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                   
+                  
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+        <!--Aquí vista parcial slider-->
+        @if (ViewBag.IsHome == true )
+        {
+            <partial name="_Slider"  />
+        }
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -60,9 +78,20 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BlogCore. Desarrollado por: <a href="https://render2web.com">render2web</a>
+    <!--Banner-->
+    <div class="container-fluid banner-container">
+        <div class="container banner-content">
+            <button type="button" class="btn btn-secondary subscibe-btn">
+                Suscribete a nuestro Blog
+            </button>
+        </div>
+
+    </div>
+
+    <footer class="border-top footer text-muted bg-dark" style="background-color: #1a1a1a !important">
+        <div class="container p-4">
+            <span class="text-white">&copy; 2025 - BlogCore. Desarrollado por: Micke Prado</span>
+            
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

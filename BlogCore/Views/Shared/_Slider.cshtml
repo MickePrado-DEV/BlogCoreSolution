@@ -1,0 +1,43 @@
+﻿@model BlogCoreSolution.Models.ViewModels.HomeVM
+
+@{
+    var slidersActivos = (Model?.SlidersList ?? Enumerable.Empty<BlogCoreSolution.Models.Slider>())
+        .Where(s => s.Status && !string.IsNullOrWhiteSpace(s.UrlImage))
+        .ToList();
+}
+
+@if (slidersActivos.Count > 0)
+{
+    <div id="sliderImages" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @{
+                var index = 0;
+            }
+            @foreach (var slider in slidersActivos)
+            {
+                var claseActiva = index == 0 ? "active" : "";
+                var rutaImagen = slider.UrlImage!.Replace("\\", "/");
+
+                <div class="carousel-item @claseActiva">
+                    <img src="@rutaImagen" class="d-block w-100" style="height:450px; object-fit:cover;" alt="@slider.Name" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="text-white text-center bg-dark py-2 opacity-75">
+                            @Html.Raw(slider.Name)
+                        </h1>
+                    </div>
+                </div>
+
+                index++;
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#sliderImages" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#sliderImages" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+}

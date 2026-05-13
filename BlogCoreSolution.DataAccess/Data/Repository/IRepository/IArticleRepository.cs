@@ -8,5 +8,9 @@ namespace BlogCoreSolution.DataAccess.Data.Repository.IRepository
     public interface IArticleRepository: IRepository<Article>
     {
         void Update(Article article);
+
+        //metodo para el buscador
+
+        IQueryable<Article> AsQueryable();
     }
 }

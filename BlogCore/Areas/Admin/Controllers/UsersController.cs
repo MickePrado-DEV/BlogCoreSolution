@@ -1,10 +1,13 @@
 ﻿using BlogCoreSolution.DataAccess.Data.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BlogCore.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
+   
     public class UsersController : Controller
     {
         private readonly IWorkContainer _workContainer;
@@ -18,10 +21,13 @@ namespace BlogCore.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ClaimsIdentity? claimsIdentity = (ClaimsIdentity)User.Identity;
-            Claim? currentUser = claimsIdentity!.FindFirst(ClaimTypes.NameIdentifier);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return Challenge();
+            }
 
-            return View(_workContainer.UserRepository.GetAll(currentUser!.Value));
+            return View(_workContainer.UserRepository.GetAll(currentUserId));
         }
         [HttpGet]
         public IActionResult Block(string id)

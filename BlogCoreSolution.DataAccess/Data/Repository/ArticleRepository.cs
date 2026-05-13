@@ -15,6 +15,11 @@ namespace BlogCoreSolution.DataAccess.Data.Repository
             _db = db;
         }
 
+        public IQueryable<Article> AsQueryable()
+        {
+            return _db.Set<Article>().AsQueryable();
+        }
+
         public void Update(Article article)
         {
             var objToDb = _db.Articles.FirstOrDefault(s=> s.Id == article.Id);
